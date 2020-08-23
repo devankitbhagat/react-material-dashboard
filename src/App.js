@@ -10,9 +10,10 @@ import theme from './theme';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import './assets/scss/index.scss';
 import validators from './common/validators';
+import { AppContextProvider } from './Hooks/AppContext';
 import Routes from './Routes';
 
-const browserHistory = createBrowserHistory();
+export const browserHistory = createBrowserHistory();
 
 Chart.helpers.extend(Chart.elements.Rectangle.prototype, {
   draw: chartjs.draw
@@ -27,9 +28,12 @@ export default class App extends Component {
   render() {
     return (
       <ThemeProvider theme={theme}>
+        <AppContextProvider>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
         <Router history={browserHistory}>
           <Routes />
         </Router>
+      </AppContextProvider>
       </ThemeProvider>
     );
   }

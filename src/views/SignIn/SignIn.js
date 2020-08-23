@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link as RouterLink, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import validate from 'validate.js';
 import { makeStyles } from '@material-ui/styles';
@@ -8,12 +8,14 @@ import {
   Button,
   IconButton,
   TextField,
-  Link,
-  Typography
+  Typography,
+  Collapse
 } from '@material-ui/core';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-
-import { Facebook as FacebookIcon, Google as GoogleIcon } from 'icons';
+import { Alert, AlertTitle } from '@material-ui/lab';
+import { signIn } from '../../Models/Auth';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 const schema = {
   email: {
@@ -45,30 +47,31 @@ const useStyles = makeStyles(theme => ({
     }
   },
   quote: {
-    backgroundColor: theme.palette.neutral,
-    height: '100%',
+    backgroundColor: theme.palette.primary.main,
+    height: '98%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundImage: 'url(/images/auth.jpg)',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center'
+    backgroundPosition: 'center',
+    margin: '1%',
+    borderRadius: '20px'
   },
   quoteInner: {
     textAlign: 'center',
     flexBasis: '600px'
   },
   quoteText: {
-    color: theme.palette.white,
+    color: theme.palette.secondary.main,
     fontWeight: 300
   },
   name: {
     marginTop: theme.spacing(3),
-    color: theme.palette.white
+    color: theme.palette.secondary.main
   },
   bio: {
-    color: theme.palette.white
+    color: theme.palette.secondary.main
   },
   contentContainer: {},
   content: {
@@ -122,6 +125,9 @@ const useStyles = makeStyles(theme => ({
   },
   signInButton: {
     margin: theme.spacing(2, 0)
+  },
+  alert: {
+    margin: theme.spacing(2, 0)
   }
 }));
 
@@ -136,6 +142,31 @@ const SignIn = props => {
     touched: {},
     errors: {}
   });
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertType, setAlertType] = useState('error');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertTitle, setAlertTitle] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => {
+    setShowPassword(true);
+  };
+
+  const handleMouseDownPassword = () => {
+    setShowPassword(false);
+  };
+
+  const invalidCredentials = {
+    title: 'Incorrect credentials!',
+    message:
+      'You have entered incorrect credentials, please enter correct credentials.'
+  };
+
+  const error = {
+    title: 'Duh Uh!',
+    message: 'Something went wrong! Please try again after sometime.'
+  };
 
   useEffect(() => {
     const errors = validate(formState.values, schema);
@@ -146,10 +177,6 @@ const SignIn = props => {
       errors: errors || {}
     }));
   }, [formState.values]);
-
-  const handleBack = () => {
-    history.goBack();
-  };
 
   const handleChange = event => {
     event.persist();
@@ -172,7 +199,33 @@ const SignIn = props => {
 
   const handleSignIn = event => {
     event.preventDefault();
-    history.push('/');
+    setLoading(true);
+    signIn(formState.values)
+      .then(res => {
+        const response = res.data;
+        setLoading(false);
+        const token = response.token;
+        window.sessionStorage.setItem('user', JSON.stringify({ token }));
+        history.push('/');
+      })
+      .catch(e => {
+        setAlertType('error');
+        setLoading(false);
+        if (
+          e &&
+          e.response &&
+          e.response.data &&
+          e.response.data.error === 'Unauthorized'
+        ) {
+          setShowAlert(true);
+          setAlertMessage(invalidCredentials.message);
+          setAlertTitle(invalidCredentials.title);
+        } else {
+          setShowAlert(true);
+          setAlertMessage(error.message);
+          setAlertTitle(error.title);
+        }
+      });
   };
 
   const hasError = field =>
@@ -180,104 +233,25 @@ const SignIn = props => {
 
   return (
     <div className={classes.root}>
-      <Grid
-        className={classes.grid}
-        container
-      >
-        <Grid
-          className={classes.quoteContainer}
-          item
-          lg={5}
-        >
+      <Grid className={classes.grid} container>
+        <Grid className={classes.quoteContainer} item lg={5}>
           <div className={classes.quote}>
             <div className={classes.quoteInner}>
-              <Typography
-                className={classes.quoteText}
-                variant="h1"
-              >
-                Hella narwhal Cosby sweater McSweeney's, salvia kitsch before
-                they sold out High Life.
+              <Typography className={classes.quoteText} variant="h1">
+                Your Second Home Admin Panel
               </Typography>
-              <div className={classes.person}>
-                <Typography
-                  className={classes.name}
-                  variant="body1"
-                >
-                  Takamaru Ayako
-                </Typography>
-                <Typography
-                  className={classes.bio}
-                  variant="body2"
-                >
-                  Manager at inVision
-                </Typography>
-              </div>
             </div>
           </div>
         </Grid>
-        <Grid
-          className={classes.content}
-          item
-          lg={7}
-          xs={12}
-        >
+        <Grid className={classes.content} item lg={7} xs={12}>
           <div className={classes.content}>
-            <div className={classes.contentHeader}>
-              <IconButton onClick={handleBack}>
-                <ArrowBackIcon />
-              </IconButton>
-            </div>
             <div className={classes.contentBody}>
-              <form
-                className={classes.form}
-                onSubmit={handleSignIn}
-              >
-                <Typography
-                  className={classes.title}
-                  variant="h2"
-                >
+              <form className={classes.form} onSubmit={handleSignIn}>
+                <Typography className={classes.title} variant="h2">
                   Sign in
                 </Typography>
-                <Typography
-                  color="textSecondary"
-                  gutterBottom
-                >
-                  Sign in with social media
-                </Typography>
-                <Grid
-                  className={classes.socialButtons}
-                  container
-                  spacing={2}
-                >
-                  <Grid item>
-                    <Button
-                      color="primary"
-                      onClick={handleSignIn}
-                      size="large"
-                      variant="contained"
-                    >
-                      <FacebookIcon className={classes.socialIcon} />
-                      Login with Facebook
-                    </Button>
-                  </Grid>
-                  <Grid item>
-                    <Button
-                      onClick={handleSignIn}
-                      size="large"
-                      variant="contained"
-                    >
-                      <GoogleIcon className={classes.socialIcon} />
-                      Login with Google
-                    </Button>
-                  </Grid>
-                </Grid>
-                <Typography
-                  align="center"
-                  className={classes.sugestion}
-                  color="textSecondary"
-                  variant="body1"
-                >
-                  or login with email address
+                <Typography color="textSecondary" gutterBottom>
+                  Login to your account using your email
                 </Typography>
                 <TextField
                   className={classes.textField}
@@ -303,34 +277,39 @@ const SignIn = props => {
                   label="Password"
                   name="password"
                   onChange={handleChange}
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   value={formState.values.password || ''}
                   variant="outlined"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          edge="end"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}>
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }}
                 />
+                <Collapse in={showAlert}>
+                  <Alert severity={alertType} className={classes.alert}>
+                    <AlertTitle>{alertTitle}</AlertTitle>
+                    {alertMessage}
+                  </Alert>
+                </Collapse>
                 <Button
                   className={classes.signInButton}
                   color="primary"
-                  disabled={!formState.isValid}
+                  disabled={!formState.isValid || loading}
                   fullWidth
                   size="large"
                   type="submit"
-                  variant="contained"
-                >
-                  Sign in now
+                  variant="contained">
+                  Sign in
                 </Button>
-                <Typography
-                  color="textSecondary"
-                  variant="body1"
-                >
-                  Don't have an account?{' '}
-                  <Link
-                    component={RouterLink}
-                    to="/sign-up"
-                    variant="h6"
-                  >
-                    Sign up
-                  </Link>
-                </Typography>
               </form>
             </div>
           </div>

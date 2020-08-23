@@ -6,17 +6,17 @@ const black = '#000000';
 export default {
   black,
   white,
-  primary: {
-    contrastText: white,
-    dark: colors.indigo[900],
-    main: colors.indigo[500],
-    light: colors.indigo[100]
-  },
   secondary: {
     contrastText: white,
-    dark: colors.blue[900],
-    main: colors.blue['A400'],
-    light: colors.blue['A400']
+    dark: '#aa365f',
+    main: '#df678c',
+    light: '#ff98bc'
+  },
+  primary: {
+    contrastText: white,
+    dark: '#190035',
+    main: '#3d155f',
+    light: '#6b3f8d'
   },
   success: {
     contrastText: white,

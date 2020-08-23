@@ -5,9 +5,13 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 import { AppBar, Toolbar } from '@material-ui/core';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     boxShadow: 'none'
+  },
+  logo: {
+    maxWidth: '200px',
+    color: theme.palette.secondary.main
   }
 }));
 
@@ -25,10 +29,7 @@ const Topbar = props => {
     >
       <Toolbar>
         <RouterLink to="/">
-          <img
-            alt="Logo"
-            src="/images/logos/logo--white.svg"
-          />
+        <h2 className={classes.logo}>Your Second Home</h2>
         </RouterLink>
       </Toolbar>
     </AppBar>

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 
 import { UsersToolbar, UsersTable } from './components';
+import { listUsers } from '../../Models/User';
 import mockData from './data';
 
 const useStyles = makeStyles(theme => ({
@@ -16,13 +17,26 @@ const useStyles = makeStyles(theme => ({
 const UserList = () => {
   const classes = useStyles();
 
-  const [users] = useState(mockData);
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchUsers = async() => {
+    const res = await listUsers();
+    if(res && res.data) {
+      setUsers(res.data);
+    }
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    setLoading(true);
+    fetchUsers();
+  }, [])
 
   return (
     <div className={classes.root}>
-      <UsersToolbar />
       <div className={classes.content}>
-        <UsersTable users={users} />
+        <UsersTable users={users} loading={loading} />
       </div>
     </div>
   );

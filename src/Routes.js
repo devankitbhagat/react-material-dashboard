@@ -5,16 +5,16 @@ import { RouteWithLayout } from './components';
 import { Main as MainLayout, Minimal as MinimalLayout } from './layouts';
 
 import {
-  Dashboard as DashboardView,
-  ProductList as ProductListView,
   UserList as UserListView,
-  Typography as TypographyView,
-  Icons as IconsView,
-  Account as AccountView,
-  Settings as SettingsView,
-  SignUp as SignUpView,
   SignIn as SignInView,
-  NotFound as NotFoundView
+  NotFound as NotFoundView,
+  ItemList as ItemListView,
+  AddItem as AddItemView,
+  PriceList as PriceListView,
+  OrderList as OrderListView,
+  FAQList as FAQListView,
+  BannerList as BannerListView,
+  AddBanner as AddBannerView
 } from './views';
 
 const Routes = () => {
@@ -23,13 +23,7 @@ const Routes = () => {
       <Redirect
         exact
         from="/"
-        to="/dashboard"
-      />
-      <RouteWithLayout
-        component={DashboardView}
-        exact
-        layout={MainLayout}
-        path="/dashboard"
+        to="/users"
       />
       <RouteWithLayout
         component={UserListView}
@@ -38,40 +32,46 @@ const Routes = () => {
         path="/users"
       />
       <RouteWithLayout
-        component={ProductListView}
+        component={ItemListView}
         exact
         layout={MainLayout}
-        path="/products"
+        path="/items"
       />
       <RouteWithLayout
-        component={TypographyView}
+        component={BannerListView}
         exact
         layout={MainLayout}
-        path="/typography"
+        path="/banners"
       />
       <RouteWithLayout
-        component={IconsView}
+        component={FAQListView}
         exact
         layout={MainLayout}
-        path="/icons"
+        path="/faqs"
       />
       <RouteWithLayout
-        component={AccountView}
+        component={OrderListView}
         exact
         layout={MainLayout}
-        path="/account"
+        path="/orders"
       />
       <RouteWithLayout
-        component={SettingsView}
+        component={PriceListView}
         exact
         layout={MainLayout}
-        path="/settings"
+        path="/item/price"
       />
       <RouteWithLayout
-        component={SignUpView}
+        component={AddItemView}
         exact
-        layout={MinimalLayout}
-        path="/sign-up"
+        layout={MainLayout}
+        path="/edit-item"
+      />
+      <RouteWithLayout
+        component={AddBannerView}
+        exact
+        layout={MainLayout}
+        path="/edit-banner"
       />
       <RouteWithLayout
         component={SignInView}

@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/styles';
 import { useMediaQuery } from '@material-ui/core';
-
 import { Sidebar, Topbar, Footer } from './components';
+import { useAppConfig } from '../../Hooks/AppConfig'
+import { getAppConfig } from '../../Models/Util'
+import { AppContext } from '../../Hooks/AppContext';
+import { keyBy } from 'lodash'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,6 +34,9 @@ const Main = props => {
     defaultMatches: true
   });
 
+  const appContext = useContext(AppContext);
+  const { ctxConfig, updateContextConfig } = appContext;
+  const [appConfig, setAppConfig] = useAppConfig();
   const [openSidebar, setOpenSidebar] = useState(false);
 
   const handleSidebarOpen = () => {
@@ -43,13 +49,26 @@ const Main = props => {
 
   const shouldOpenSidebar = isDesktop ? true : openSidebar;
 
+  const setConfig = async () => {
+    const res = await getAppConfig();
+    if(res && res.data && res.data.length > 0 ) {
+      const config = keyBy(res.data, 'key');
+      setAppConfig(config);
+      updateContextConfig(config);
+    }
+  }
+  useEffect(() => {
+    if(!appConfig) {
+      setConfig()
+    }
+  }, [appConfig])
+
   return (
     <div
       className={clsx({
         [classes.root]: true,
         [classes.shiftContent]: isDesktop
-      })}
-    >
+      })}>
       <Topbar onSidebarOpen={handleSidebarOpen} />
       <Sidebar
         onClose={handleSidebarClose}

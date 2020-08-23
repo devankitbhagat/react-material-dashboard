@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
@@ -7,6 +7,7 @@ import { AppBar, Toolbar, Badge, Hidden, IconButton } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import InputIcon from '@material-ui/icons/Input';
+import { logout } from '../../../../Models/Auth'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -17,15 +18,26 @@ const useStyles = makeStyles(theme => ({
   },
   signOutButton: {
     marginLeft: theme.spacing(1)
+  },
+  logo: {
+    maxWidth: '200px',
+    color: theme.palette.secondary.main
   }
 }));
 
 const Topbar = props => {
+  const history = useHistory();
   const { className, onSidebarOpen, ...rest } = props;
 
   const classes = useStyles();
 
   const [notifications] = useState([]);
+
+  const handleSignout = async () => {
+    await logout();
+    window && window.sessionStorage.removeItem('user');
+    history.push('sign-in');
+  }
 
   return (
     <AppBar
@@ -34,10 +46,7 @@ const Topbar = props => {
     >
       <Toolbar>
         <RouterLink to="/">
-          <img
-            alt="Logo"
-            src="/images/logos/logo--white.svg"
-          />
+          <h2 className={classes.logo}>Your Second Home</h2>
         </RouterLink>
         <div className={classes.flexGrow} />
         <Hidden mdDown>
@@ -53,6 +62,7 @@ const Topbar = props => {
           <IconButton
             className={classes.signOutButton}
             color="inherit"
+            onClick={handleSignout}
           >
             <InputIcon />
           </IconButton>
