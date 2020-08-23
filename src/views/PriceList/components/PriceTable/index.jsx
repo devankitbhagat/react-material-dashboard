@@ -1,28 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { makeStyles } from '@material-ui/styles';
 import Skeleton from '@material-ui/lab/Skeleton';
 import {
-	Button,
 	Card,
-	CardActions,
-	CardContent,
-	Avatar,
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableRow,
-	Typography,
-	TablePagination
+	CardContent
 } from '@material-ui/core';
 import MaterialTable from 'material-table';
 import {addPrice, updatePrice} from '../../../../Models/Price';
-
-import { getInitials } from 'helpers';
 
 const useStyles = makeStyles(theme => ({
 	root: {},
@@ -52,12 +39,7 @@ const useStyles = makeStyles(theme => ({
 
 const PriceTable = props => {
 	const { className, users, loading, ...rest } = props;
-
 	const classes = useStyles();
-
-	const [selectedUsers] = useState([]);
-	const [rowsPerPage, setRowsPerPage] = useState(10);
-	const [page, setPage] = useState(0);
 
 	const [state, setState] = React.useState({
 		columns: [
@@ -100,14 +82,6 @@ const PriceTable = props => {
 			data: props.prices,
 		})
 	}, [props.prices])
-
-	const handlePageChange = (event, page) => {
-		setPage(page);
-	};
-
-	const handleRowsPerPageChange = event => {
-		setRowsPerPage(event.target.value);
-	};
 
 	const handleAddPrice = async (newData) => {
 		const res = await addPrice({...newData, itemId: props.itemId});

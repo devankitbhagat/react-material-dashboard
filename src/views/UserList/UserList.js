@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 
-import { UsersToolbar, UsersTable } from './components';
+import { UsersTable } from './components';
 import { listUsers } from '../../Models/User';
-import mockData from './data';
 
 const useStyles = makeStyles(theme => ({
   root: {

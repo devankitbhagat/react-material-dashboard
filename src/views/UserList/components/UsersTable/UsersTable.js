@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import moment from 'moment';
@@ -6,13 +6,10 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import { makeStyles } from '@material-ui/styles';
 import Skeleton from '@material-ui/lab/Skeleton';
 import {
-  Button,
   Card,
-  CardActions,
   CardContent,
 } from '@material-ui/core';
 import MUIDataTable from "mui-datatables";
-import { getInitials } from 'helpers';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -105,20 +102,7 @@ const columns = [
 
 const UsersTable = props => {
   const { className, users, loading, ...rest } = props;
-
   const classes = useStyles();
-
-  const [selectedUsers] = useState([]);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [page, setPage] = useState(0);
-
-  const handlePageChange = (event, page) => {
-    setPage(page);
-  };
-
-  const handleRowsPerPageChange = event => {
-    setRowsPerPage(event.target.value);
-  };
 
   const rowSkeleton = () => {
     let a = [1, 2, 3, 4, 5, 6];

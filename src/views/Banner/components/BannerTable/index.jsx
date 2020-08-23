@@ -52,7 +52,7 @@ const useStyles = makeStyles(theme => ({
 const BannerTable = props => {
   const { className, banners, loading, ...rest } = props;
   const appContext = useContext(AppContext);
-  const { ctxConfig, updateContextConfig } = appContext;
+  const { ctxConfig } = appContext;
   const context = ctxConfig[0];
   const history = useHistory();
   const classes = useStyles();

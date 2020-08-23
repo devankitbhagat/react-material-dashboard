@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
-import { Button } from '@material-ui/core';
-import { useHistory} from 'react-router-dom';
 
 import { SearchInput } from 'components';
 
@@ -31,13 +29,8 @@ const useStyles = makeStyles(theme => ({
 
 const UsersToolbar = props => {
   const { className, ...rest } = props;
-  const history = useHistory();
 
   const classes = useStyles();
-
-  const handleClick = () => {
-    history.push('/edit-user');
-  }
 
   return (
     <div

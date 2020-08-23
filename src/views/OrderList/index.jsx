@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
 
 import { OrderTable } from './components';
-import mockData from './data';
 import { listOrders } from '../../Models/Order';
 
 const useStyles = makeStyles(theme => ({

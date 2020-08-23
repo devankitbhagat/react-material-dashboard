@@ -35,7 +35,7 @@ const Main = props => {
   });
 
   const appContext = useContext(AppContext);
-  const { ctxConfig, updateContextConfig } = appContext;
+  const { updateContextConfig } = appContext;
   const [appConfig, setAppConfig] = useAppConfig();
   const [openSidebar, setOpenSidebar] = useState(false);
 

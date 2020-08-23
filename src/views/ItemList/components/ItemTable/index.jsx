@@ -55,7 +55,7 @@ const ItemTable = props => {
   const classes = useStyles();
 
   const appContext = useContext(AppContext);
-  const { ctxConfig, updateContextConfig } = appContext;
+  const { ctxConfig } = appContext;
   const context = ctxConfig[0];
   const [selecteditems] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);

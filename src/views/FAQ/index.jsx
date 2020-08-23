@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/styles';
-import { useLocation } from "react-router-dom";
 
 import { FAQTable } from './components';
 import { listFAQs } from '../../Models/FAQ'
@@ -16,7 +15,6 @@ const useStyles = makeStyles(theme => ({
 
 const FAQList = () => {
   const classes = useStyles();
-  const location = useLocation();
   const [faqs, setFAQList] = useState([]);
   const [loading, setLoading] = useState(false);
 

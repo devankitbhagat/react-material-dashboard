@@ -1,21 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { makeStyles } from '@material-ui/styles';
-import Skeleton from '@material-ui/lab/Skeleton';
 import {
-	Container,
-	Card,
-	CardContent,
 	Typography
 } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -26,15 +20,10 @@ import IconButton from '@material-ui/core/IconButton';
 import Box from '@material-ui/core/Box';
 import { getOrderDetail } from '../../../../Models/Order';
 import TextField from '@material-ui/core/TextField';
-import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {updateOrder} from '../../../../Models/Order';
-import { DateTimePicker } from '@progress/kendo-react-dateinputs';
 
 
 const useStyles = makeStyles(theme => ({
@@ -54,7 +43,6 @@ const useStyles = makeStyles(theme => ({
 
 
 const OrderDetail = props => {
-	const { className, orders, ...rest } = props;
 	const [openCustomerDetail, setOpenCustomerDetail] = React.useState(false);
 	const [openAddressDetail, setOpenAddressDetail] = React.useState(false);
 	const [openOrderDetail, setOpenOrderDetail] = React.useState(false);
@@ -85,17 +73,6 @@ const OrderDetail = props => {
 			fetchOrderDetail(props.orderId)
 		}
 	}, [props.orderId])
-
-	const rowSkeleton = () => {
-		let a = [1, 2, 3, 4, 5, 6];
-		return (
-			<div className={classes.skeleton}>
-				{a.map(() => (
-					<Skeleton height={40} />
-				))}
-			</div>
-		);
-	};
 
 	const onChange = (event) => {
 		const data = {
@@ -184,10 +161,9 @@ const OrderDetail = props => {
             id: 'filled-age-native-simple',
           }}
         >
-          <option value="pending">Pending</option>
           <option value="placed">Placed</option>
           <option value="accepted">Accepted</option>
-					<option value="pending">Pending</option>
+					<option value="returned">Returned</option>
 	        <option value="returnIntiated">Return Initiated</option>
         </Select>
 			</Grid>
