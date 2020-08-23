@@ -206,7 +206,7 @@ const SignIn = props => {
         setLoading(false);
         const token = response.token;
         window.sessionStorage.setItem('user', JSON.stringify({ token }));
-        history.push('/');
+        history.push('/users');
       })
       .catch(e => {
         setAlertType('error');
